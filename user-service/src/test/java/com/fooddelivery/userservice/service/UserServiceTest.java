@@ -13,7 +13,6 @@ public class UserServiceTest {
     void shouldReturnUserSuccessfully() {
 
         UserResponseDto response = userService.getUserById(1L);
-
         Assertions.assertNotNull(response);
         Assertions.assertEquals(1L, response.getId());
     }

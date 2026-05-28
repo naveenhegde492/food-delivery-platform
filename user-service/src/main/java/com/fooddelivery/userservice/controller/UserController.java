@@ -5,6 +5,7 @@ import com.fooddelivery.userservice.dto.CreateUserRequestDto;
 import com.fooddelivery.userservice.dto.UserResponseDto;
 import com.fooddelivery.userservice.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,18 +13,16 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
     @GetMapping("/{id}")
     public CommonApiResponse<UserResponseDto> getUserById(@PathVariable Long id) {
 
-        UserResponseDto response = userService.getUserById(id);
+        UserResponseDto response =
+                userService.getUserById(id);
 
         return CommonApiResponse.<UserResponseDto>builder()
                 .timestamp(LocalDateTime.now())
@@ -33,11 +32,11 @@ public class UserController {
                 .build();
     }
 
-
     @PostMapping
     public CommonApiResponse<UserResponseDto> createUser(@Valid @RequestBody CreateUserRequestDto request) {
 
-        UserResponseDto response = userService.createUser(request);
+        UserResponseDto response =
+                userService.createUser(request);
 
         return CommonApiResponse.<UserResponseDto>builder()
                 .timestamp(LocalDateTime.now())
@@ -46,5 +45,4 @@ public class UserController {
                 .data(response)
                 .build();
     }
-
 }

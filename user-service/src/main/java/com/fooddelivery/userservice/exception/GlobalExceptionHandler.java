@@ -60,4 +60,18 @@ public class GlobalExceptionHandler {
                 .data(null)
                 .build();
     }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public CommonApiResponse<String> handleUserAlreadyExistsException(
+            UserAlreadyExistsException ex
+    ) {
+
+        return CommonApiResponse.<String>builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .data(null)
+                .build();
+    }
 }
