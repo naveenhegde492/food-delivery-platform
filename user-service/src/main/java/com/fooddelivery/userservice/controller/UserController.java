@@ -2,6 +2,7 @@ package com.fooddelivery.userservice.controller;
 
 import com.fooddelivery.userservice.dto.CommonApiResponse;
 import com.fooddelivery.userservice.dto.CreateUserRequestDto;
+import com.fooddelivery.userservice.dto.UpdateUserRequestDto;
 import com.fooddelivery.userservice.dto.UserResponseDto;
 import com.fooddelivery.userservice.service.UserService;
 import jakarta.validation.Valid;
@@ -42,6 +43,21 @@ public class UserController {
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CREATED.value())
                 .message("User created successfully")
+                .data(response)
+                .build();
+    }
+
+    @PutMapping("/{id}")
+    public CommonApiResponse<UserResponseDto> updateUser(@PathVariable Long id,
+                                                         @Valid @RequestBody UpdateUserRequestDto request) {
+
+        UserResponseDto response =
+                userService.updateUser(id, request);
+
+        return CommonApiResponse.<UserResponseDto>builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("User updated successfully")
                 .data(response)
                 .build();
     }
