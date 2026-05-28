@@ -37,11 +37,7 @@ public class UserController {
     @PostMapping
     public CommonApiResponse<UserResponseDto> createUser(@Valid @RequestBody CreateUserRequestDto request) {
 
-        UserResponseDto response = UserResponseDto.builder()
-                .id(1L)
-                .name(request.getName())
-                .email(request.getEmail())
-                .build();
+        UserResponseDto response = userService.createUser(request);
 
         return CommonApiResponse.<UserResponseDto>builder()
                 .timestamp(LocalDateTime.now())

@@ -2,6 +2,21 @@ spring:
   application:
     name: user-service
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/user_db
+    username: postgres
+    password: elephant
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+
 server:
   port: 8081
 
@@ -18,3 +33,5 @@ springdoc:
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%X{X-Correlation-Id}] %-5level %logger{36} - %msg%n"
+
+
