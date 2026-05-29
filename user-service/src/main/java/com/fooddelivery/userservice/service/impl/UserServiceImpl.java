@@ -29,17 +29,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto getUserById(Long id) {
 
-        log.info("Fetching user with id: {}", id);
+        log.info(
+                "Fetching user. userId={}",
+                id
+        );
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
 
-                    log.error("User not found with id: {}", id);
+                    log.error(
+                            "User not found. userId={}",
+                            id
+                    );
 
                     return new UserNotFoundException(
                             "User not found with id: " + id
                     );
                 });
-        log.info("Successfully fetched user with id: {}", id);
+        log.info(
+                "User fetched successfully. userId={}, email={}",
+                user.getId(),
+                user.getEmail()
+        );
         return UserMapper.toDto(user);
     }
 
@@ -47,11 +57,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto createUser(CreateUserRequestDto request) {
 
-        log.info("Creating user with email: {}", request.getEmail());
+        log.info(
+                "Creating user. email={}",
+                request.getEmail()
+        );
         Optional<User> existingUser =
                 userRepository.findByEmail(request.getEmail());
         if (existingUser.isPresent()) {
-            log.error("User already exists with email: {}", request.getEmail());
+            log.error(
+                    "Duplicate email detected. email={}",
+                    request.getEmail()
+            );
             throw new UserAlreadyExistsException(
                     "User already exists with email: "
                             + request.getEmail()
@@ -64,7 +80,11 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User savedUser = userRepository.save(user);
-        log.info("User created successfully with id: {}", savedUser.getId());
+        log.info(
+                "User created successfully. userId={}, email={}",
+                savedUser.getId(),
+                savedUser.getEmail()
+        );
         return UserMapper.toDto(savedUser);
     }
 
@@ -73,11 +93,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto updateUser(Long id, UpdateUserRequestDto request) {
 
-        log.info("Updating user with id: {}", id);
+        log.info(
+                "Updating user. userId={}",
+                id
+        );
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.error("User not found with id: {}", id);
+                    log.error(
+                            "User not found. userId={}",
+                            id
+                    );
                     return new UserNotFoundException(
                             "User not found with id: " + id
                     );
@@ -85,7 +111,10 @@ public class UserServiceImpl implements UserService {
 
         if (!user.getEmail().equals(request.getEmail())
                 && userRepository.existsByEmail(request.getEmail())) {
-            log.error("Email already exists: {}", request.getEmail());
+            log.error(
+                    "Duplicate email detected. email={}",
+                    request.getEmail()
+            );
             throw new UserAlreadyExistsException(
                     "User already exists with email: "
                             + request.getEmail()
@@ -95,7 +124,11 @@ public class UserServiceImpl implements UserService {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         User updatedUser = userRepository.save(user);
-        log.info("User updated successfully with id: {}", id);
+        log.info(
+                "User updated successfully. userId={}, email={}",
+                updatedUser.getId(),
+                updatedUser.getEmail()
+        );
         return UserMapper.toDto(updatedUser);
     }
 
@@ -103,24 +136,36 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteUser(Long id) {
-        log.info("Deleting user with id: {}", id);
+        log.info(
+                "Deleting user. userId={}",
+                id
+        );
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.error("User not found with id: {}", id);
+                    log.error(
+                            "User not found. userId={}",
+                            id
+                    );
                     return new UserNotFoundException(
                             "User not found with id: " + id
                     );
                 });
+        String email = user.getEmail();
         userRepository.delete(user);
-        log.info("User deleted successfully with id: {}", id);
+        log.info(
+                "User deleted successfully. userId={}, email={}",
+                id,
+                email
+        );
     }
 
     @Override
     public Page<UserResponseDto> getAllUsers(Pageable pageable) {
         log.info(
-                "Fetching users page={}, size={}",
+                "Fetching users. page={}, size={}, sort={}",
                 pageable.getPageNumber(),
-                pageable.getPageSize()
+                pageable.getPageSize(),
+                pageable.getSort()
         );
         Page<User> users = userRepository.findAll(pageable);
         return users.map(UserMapper::toDto);
