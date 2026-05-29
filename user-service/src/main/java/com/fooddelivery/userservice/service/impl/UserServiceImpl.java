@@ -12,6 +12,8 @@ import com.fooddelivery.userservice.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -101,7 +103,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteUser(Long id) {
-
         log.info("Deleting user with id: {}", id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
@@ -110,8 +111,18 @@ public class UserServiceImpl implements UserService {
                             "User not found with id: " + id
                     );
                 });
-
         userRepository.delete(user);
         log.info("User deleted successfully with id: {}", id);
+    }
+
+    @Override
+    public Page<UserResponseDto> getAllUsers(Pageable pageable) {
+        log.info(
+                "Fetching users page={}, size={}",
+                pageable.getPageNumber(),
+                pageable.getPageSize()
+        );
+        Page<User> users = userRepository.findAll(pageable);
+        return users.map(UserMapper::toDto);
     }
 }

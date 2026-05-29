@@ -204,4 +204,21 @@ class UserControllerIntegrationTest {
         mockMvc.perform(delete("/api/v1/users/999"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void shouldFetchUsersWithPagination() throws Exception {
+
+        for (int i = 1; i <= 15; i++) {
+            User user = User.builder()
+                    .name("User " + i)
+                    .email("user" + i + "@gmail.com")
+                    .build();
+            userRepository.save(user);
+        }
+
+        mockMvc.perform(get("/api/v1/users?page=0&size=5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.content.length()").value(5))
+                .andExpect(jsonPath("$.data.totalElements").value(15));
+    }
 }
