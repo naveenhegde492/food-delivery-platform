@@ -96,4 +96,22 @@ public class UserServiceImpl implements UserService {
         log.info("User updated successfully with id: {}", id);
         return UserMapper.toDto(updatedUser);
     }
+
+
+    @Transactional
+    @Override
+    public void deleteUser(Long id) {
+
+        log.info("Deleting user with id: {}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("User not found with id: {}", id);
+                    return new UserNotFoundException(
+                            "User not found with id: " + id
+                    );
+                });
+
+        userRepository.delete(user);
+        log.info("User deleted successfully with id: {}", id);
+    }
 }

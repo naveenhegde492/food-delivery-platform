@@ -50,7 +50,6 @@ public class UserController {
     @PutMapping("/{id}")
     public CommonApiResponse<UserResponseDto> updateUser(@PathVariable Long id,
                                                          @Valid @RequestBody UpdateUserRequestDto request) {
-
         UserResponseDto response =
                 userService.updateUser(id, request);
 
@@ -60,5 +59,13 @@ public class UserController {
                 .message("User updated successfully")
                 .data(response)
                 .build();
+    }
+
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable Long id) {
+
+        userService.deleteUser(id);
     }
 }
