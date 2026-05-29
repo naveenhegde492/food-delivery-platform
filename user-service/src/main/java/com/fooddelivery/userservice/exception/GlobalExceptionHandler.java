@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.fooddelivery.userservice.constants.ApiMessages.VALIDATION_FAILED;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -41,7 +43,7 @@ public class GlobalExceptionHandler {
         return CommonApiResponse.<Map<String, String>>builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
-                .message("Validation failed")
+                .message(VALIDATION_FAILED)
                 .data(errors)
                 .build();
     }

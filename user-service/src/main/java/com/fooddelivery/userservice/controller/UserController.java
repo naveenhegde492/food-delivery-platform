@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+import static com.fooddelivery.userservice.constants.ApiMessages.*;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -47,7 +49,7 @@ public class UserController {
         return CommonApiResponse.<UserResponseDto>builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.OK.value())
-                .message("User fetched successfully")
+                .message(USER_FETCHED)
                 .data(response)
                 .build();
     }
@@ -79,7 +81,7 @@ public class UserController {
         return CommonApiResponse.<UserResponseDto>builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CREATED.value())
-                .message("User created successfully")
+                .message(USER_CREATED)
                 .data(response)
                 .build();
     }
@@ -110,7 +112,7 @@ public class UserController {
         return CommonApiResponse.<UserResponseDto>builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.OK.value())
-                .message("User updated successfully")
+                .message(USER_UPDATED)
                 .data(response)
                 .build();
     }
@@ -164,7 +166,7 @@ public class UserController {
         return CommonApiResponse.<Page<UserResponseDto>>builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.OK.value())
-                .message("Users fetched successfully")
+                .message(USERS_FETCHED)
                 .data(users)
                 .build();
     }
